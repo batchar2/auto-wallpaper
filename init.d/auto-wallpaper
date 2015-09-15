@@ -1,0 +1,50 @@
+#!/bin/bash
+# chkconfig: 2345 20 80
+# description: Description comes here....
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DESC="auto-wallpaper"
+NAME=auto-wallpaper
+DAEMON=/usr/sbin/$NAME
+DAEMON_ARGS="--options args"
+PIDFILE=/var/run/$NAME.pid
+SCRIPTNAME=/etc/init.d/$NAME
+
+DELAY=300
+
+
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
+
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.2-14) to ensure that this file is present
+# and status_of_proc is working.
+. /lib/lsb/init-functions
+
+function start() {
+  
+  start-stop-daemon -Sbvmp  $PIDFILE -x $DAEMON -- -d $DELAY
+}
+
+function stop() {
+  start-stop-daemon -Kvp $PIDFILE
+}
+
+case "$1" in 
+    start)
+       start
+       ;;
+    stop)
+       stop
+       ;;
+    restart)
+       stop
+       start
+       ;;
+    status)
+       # code to check status of app comes here 
+       # example: status program_name
+       ;;
+    *)
+       echo "Usage: $0 {start|stop|status|restart}"
+esac
